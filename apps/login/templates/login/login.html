@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Please login or register.{% endblock %}
+{% block pageTitle %}Login and Registration{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+<div id="registration-form">
+    <h2>Registration Form</h2>
+    <form action="{% url 'login:registration' %}" method='post'>
+        {% csrf_token %}
+        {{registrationForm}}
+        <input type="submit" value="register">
+    </form>
+</div> <!-- end registration-form -->
+<div id="loginForm">
+    <h2>Login Form</h2>
+    <form action="{% url 'login:login' %}" method='post'>
+        {% csrf_token %}
+        {{loginForm}}
+        <input type="submit" value='login'>
+    </form>
+</div>
+{% endblock %}

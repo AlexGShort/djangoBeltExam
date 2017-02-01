@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Poke-a-Friend{% endblock %}
+{% block header %}
+<a href="{% url 'login:logout' %}">Logout</a>
+{% endblock %}
+{% block pageTitle %}Poke-a-Friend{% endblock %}
+{% block content %}
+<h2>Welcome, {{request.session.user_name}}</h2>
+<p>{{numPokers}} {{ numPokers|pluralize:"person has,people have" }} poked you!</p>
+<div id="pokedYou">
+    {% for poked in pokedYou %}
+        <p>{{poked.first_name}} poked you {{poked.num_pokes}} time{{poked.num_pokes|pluralize}}.</p>
+    {% endfor %}
+</div> <!-- end pokedYou -->
+<div id="userTable">
+    <h2>People you may want to poke:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th><th>Alias</th><th>Email Address</th><th>Poke History</th><th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{user.first_name}}</td><td>{{user.username}}</td><td>{{user.email}}</td><td>{{user.num_pokes}} poke{{user.num_pokes|pluralize}}</td><td>
+                    <form action="{% url 'beltexam:poke' %}" method='post'>
+                        {% csrf_token %}
+                        <input type="hidden" name='poked_user' value={{user.id}}>
+                        <input type="submit" value="Poke">
+                    </form></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% comment %}
+<div id="pokeTable">
+    <table>
+        <thead>
+            <tr>
+                <th>Poker ID</th><th>Poke Name</th><th>Poked ID</th><th>Poked Name
+            </tr>
+        </thead>
+        <tbody>
+            {% for poke in pokes %}
+            <tr>
+                <td>{{poke.poker.id}}</td><td>{{poke.poker.first_name}}</td><td>{{poke.poked.id}}</td><td>{{poke.poked.first_name}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div> <!-- end pokeTable -->
+{% endcomment %}
+{% endblock %}
